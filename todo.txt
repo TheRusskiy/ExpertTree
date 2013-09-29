@@ -1,0 +1,7 @@
+todo this todo
+visual:
+    1. keep history of states (for ctrl+z, ctrl+shift+z)
+    2. gui for making rules
+
+functional:
+    1. bi/single directional connections
