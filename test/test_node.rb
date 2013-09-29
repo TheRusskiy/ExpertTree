@@ -47,6 +47,16 @@ class TestNode < MiniTest::Unit::TestCase
     @node.activate
   end
 
+  def test_required_field
+    @node.require 'property_1'
+    @node.require 'property_2'
+
+    refute @node.activated?
+    @node.connect 'property_1'
+    refute @node.activated?
+    @node.connect 'property_2'
+    assert @node.activated?
+  end
 
 end
       

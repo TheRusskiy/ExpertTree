@@ -7,7 +7,7 @@ class Connection
   end
 
   def activate
-    @from.activate
-    @to.activate
+    @from.connect @to.name
+    @to.connect @from.name
   end
 end
