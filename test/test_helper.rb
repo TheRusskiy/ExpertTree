@@ -4,6 +4,14 @@ require 'minitest/reporters'
 MiniTest::Reporters.use! MiniTest::Reporters::RubyMineReporter.new
 require_relative '../src/node'
 require_relative '../src/connection'
+require_relative '../src/network_parser'
+require_relative '../src/network_structure'
+
+module Helper
+  def self.file_fixture
+     @file||=File.open('../test/network_fixture.yml').reduce :+
+  end
+end
 
 class Mock
   def initialize(method_name, block = nil )

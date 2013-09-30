@@ -25,7 +25,15 @@ class Node
   alias :<< :add
 
   def require property
-    @required << property
+    if property.respond_to? :each
+      @required = @required + property
+    else
+      @required << property
+    end
+  end
+
+  def required
+    @required
   end
 
   def connect property
