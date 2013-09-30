@@ -28,5 +28,9 @@ class TestNetworkStructure < MiniTest::Unit::TestCase
     assert_equal conns[3].to.name, '1024'
   end
 
+  def test_integration
+
+  end
+
 end
       
