@@ -30,6 +30,12 @@ nodes:
         1: "bus"
         2: "memory"
         3: "frequency"
+    2:
+      name: "AMD 7970"
+      required:
+        1: "bus"
+        2: "memory"
+        3: "frequency"
   profiles:
     1:
       name: "gaming"
@@ -49,6 +55,13 @@ connections:
     to:
       type: "memory"
       name: "1024"
+  11:
+    from:
+      type: "videocard"
+      name: "AMD 7970"
+    to:
+      type: "memory"
+      name: "2048"
   20:
     from:
       type: "videocard"
@@ -59,11 +72,25 @@ connections:
   21:
     from:
       type: "videocard"
+      name: "AMD 7970"
+    to:
+      type: "bus"
+      name: "pci-e 2.0"
+  30:
+    from:
+      type: "videocard"
       name: "AMD 5870"
     to:
       type: "frequency"
+      name: "2000"
+  31:
+    from:
+      type: "videocard"
+      name: "AMD 7970"
+    to:
+      type: "frequency"
       name: "3000"
-  30:
+  40:
     from:
       type: "profiles"
       name: "gaming"
@@ -77,3 +104,10 @@ connections:
     to:
       type: "memory"
       name: "1024"
+  41:
+    from:
+      type: "profiles"
+      name: "gaming"
+    to:
+      type: "memory"
+      name: "2048"

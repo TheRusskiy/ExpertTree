@@ -22,20 +22,22 @@ class TestNetworkStructure < MiniTest::Unit::TestCase
   end
 
   def test_connections
-    conns = @builder.connections
-    assert_equal conns.length, 5
-    assert_equal conns[4].class, Connection
-    assert_equal conns[4].from.name, 'gaming'
-    assert_equal conns[4].to.name, '1024'
+    conn = @builder.connections[1]
+    assert_equal @builder.connections.length, 8
+    assert_equal conn.class, Connection
+    assert_equal conn.from.name, 'AMD 7970'
+    assert_equal conn.to.name, '2048'
   end
 
   def test_integration
-    videocard = @builder.types['videocard'][0]
-    refute videocard.activated?
+    amd5870 = @builder.types['videocard'][0]
+    amd7970 = @builder.types['videocard'][1]
+    refute amd7970.activated?
     @builder.types['profiles'][0].activate
-    refute videocard.activated?
+    refute amd7970.activated?
     @builder.types['bus'][0].activate
-    assert videocard.activated?
+    assert amd7970.activated?
+    refute amd5870.activated?
   end
 
 end

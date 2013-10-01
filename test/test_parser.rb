@@ -20,9 +20,9 @@ class TestParser < MiniTest::Unit::TestCase
   end
 
   def test_connections_parsing
-    assert @parser.connections.length==5
-    assert_equal @parser.connections[0]['from']['type'], 'videocard'
-    assert_equal @parser.connections[4]['to']['name'], '1024'
+    assert_equal @parser.connections.length, 8
+    assert_equal @parser.connections[1]['from']['type'], 'videocard'
+    assert_equal @parser.connections[1]['to']['name'], '2048'
   end
 
 end
