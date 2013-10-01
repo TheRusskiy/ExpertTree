@@ -1,12 +1,13 @@
+require_relative 'node'
 class NetworkStructure
   def  initialize parser
     @parser=parser
-    create_groups
+    create_types
     create_connections
   end
 
-  def groups
-    @groups
+  def types
+    @types
   end
 
   def connections
@@ -15,17 +16,17 @@ class NetworkStructure
 
   private
 
-  def create_groups
-    @groups = {}
-    @parser.groups.each_pair do |group_name, array_of_nodes|
-      @groups[group_name] = create_nodes array_of_nodes
+  def create_types
+    @types = {}
+    @parser.types.each_pair do |group_name, array_of_nodes|
+      @types[group_name] = create_nodes array_of_nodes, group_name
     end
   end
 
-  def create_nodes array_of_nodes
+  def create_nodes array_of_nodes, group_name
     nodes = []
     for node_params in array_of_nodes
-      node = Node.new(node_params['name'])
+      node = Node.new(node_params['name'], group_name)
       required = node_params['required']
       node.require required unless required.nil?
       nodes << node
@@ -38,10 +39,10 @@ class NetworkStructure
     for connection_params in @parser.connections
       from_param = connection_params['from']
       to_param = connection_params['to']
-      from = @groups[from_param['group']].find do |n|
+      from = @types[from_param['type']].find do |n|
         n.name==from_param['name']
       end
-      to = @groups[to_param['group']].find do |n|
+      to = @types[to_param['type']].find do |n|
         n.name==to_param['name']
       end
       connection = Connection.new from, to

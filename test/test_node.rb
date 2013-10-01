@@ -2,7 +2,7 @@ require_relative 'test_helper'
 
 class TestNode < MiniTest::Unit::TestCase
   def setup
-    @node = Node.new 'name'
+    @node = Node.new 'name', 'type'
   end
 
   def teardown
@@ -11,6 +11,7 @@ class TestNode < MiniTest::Unit::TestCase
 
   def test_initialize
     assert @node.name=='name'
+    assert @node.type=='type'
   end
 
   def test_can_be_activated
@@ -50,7 +51,6 @@ class TestNode < MiniTest::Unit::TestCase
   def test_required_field
     @node.require 'property_1'
     @node.require 'property_2'
-
     refute @node.activated?
     @node.connect 'property_1'
     refute @node.activated?

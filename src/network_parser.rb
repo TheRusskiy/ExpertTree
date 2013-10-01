@@ -6,7 +6,7 @@ class NetworkParser
     parse_connections
   end
 
-  def groups
+  def types
     return @hash['nodes']
   end
 

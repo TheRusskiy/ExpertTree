@@ -9,20 +9,20 @@ class TestParser < MiniTest::Unit::TestCase
     # Do nothing
   end
 
-  def test_groups_parsing
-    assert @parser.groups.length==6
-    assert_equal @parser.groups['memory'].length, 3
-    assert_equal @parser.groups['memory'][0]['name'], "512"
-    assert_equal @parser.groups['memory'][2]['name'], "2048"
-    assert_equal @parser.groups['videocard'][0]['required'].length, 3
-    assert_equal @parser.groups['videocard'][0]['required'][0], 'bus'
-    assert_equal @parser.groups['videocard'][0]['required'][2], 'frequency'
+  def test_types_parsing
+    assert @parser.types.length==6
+    assert_equal @parser.types['memory'].length, 3
+    assert_equal @parser.types['memory'][0]['name'], "512"
+    assert_equal @parser.types['memory'][2]['name'], "2048"
+    assert_equal @parser.types['videocard'][0]['required'].length, 3
+    assert_equal @parser.types['videocard'][0]['required'][0], 'bus'
+    assert_equal @parser.types['videocard'][0]['required'][2], 'frequency'
   end
 
   def test_connections_parsing
-    assert @parser.connections.length==4
-    assert_equal @parser.connections[0]['from']['group'], 'videocard'
-    assert_equal @parser.connections[3]['to']['name'], '1024'
+    assert @parser.connections.length==5
+    assert_equal @parser.connections[0]['from']['type'], 'videocard'
+    assert_equal @parser.connections[4]['to']['name'], '1024'
   end
 
 end

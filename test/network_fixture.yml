@@ -42,31 +42,38 @@ nodes:
         1: "frequency"
         2: "memory"
 connections:
-  1:
+  10:
     from:
-      group: "videocard"
+      type: "videocard"
       name: "AMD 5870"
     to:
-      group: "memory"
+      type: "memory"
       name: "1024"
-  2:
+  20:
     from:
-      group: "videocard"
+      type: "videocard"
       name: "AMD 5870"
     to:
-      group: "bus"
+      type: "bus"
       name: "pci-e 2.0"
-  3:
+  21:
     from:
-      group: "profiles"
-      name: "gaming"
+      type: "videocard"
+      name: "AMD 5870"
     to:
-      group: "frequency"
+      type: "frequency"
       name: "3000"
-  4:
+  30:
     from:
-      group: "profiles"
+      type: "profiles"
       name: "gaming"
     to:
-      group: "memory"
+      type: "frequency"
+      name: "3000"
+  41:
+    from:
+      type: "profiles"
+      name: "gaming"
+    to:
+      type: "memory"
       name: "1024"

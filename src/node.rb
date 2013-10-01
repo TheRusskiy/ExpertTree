@@ -1,7 +1,8 @@
 class Node
-  attr_reader :name, :connections
-  def initialize name
+  attr_reader :name, :type, :connections
+  def initialize name, type
     @name=name
+    @type=type
     @activated = false
     @connections = []
     @required = []
@@ -13,8 +14,10 @@ class Node
   end
 
   def activate
-    @connections.map(&:activate) unless @activated
-    @activated = true
+    unless @activated
+      @activated = true
+      @connections.map(&:activate)
+    end
   end
 
   def add(*connections)
@@ -38,7 +41,11 @@ class Node
 
   def connect property
     @provided << property
-    activate if @required&@provided==@required
+    activate if (@required-@provided).empty?
+  end
+
+  def to_s
+    @name+(@activated ? ': activated' : '')
   end
 
 end

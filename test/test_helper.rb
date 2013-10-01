@@ -6,7 +6,6 @@ require_relative '../src/node'
 require_relative '../src/connection'
 require_relative '../src/network_parser'
 require_relative '../src/network_structure'
-
 module Helper
   def self.file_fixture
      @file||=File.open('../test/network_fixture.yml').reduce :+
@@ -46,8 +45,7 @@ class TestMock < MiniTest::Unit::TestCase
   end
 
   def test_lambda_parameter
-    some_proc = lambda {|p| p*2}
-    fake = Mock.new :some_method, some_proc
+    fake = Mock.new :some_method, lambda {|p| p*2}
     assert_equal fake.some_method(2), 4
   end
 
