@@ -2,6 +2,7 @@ class TreeView < Qt::GraphicsView
   require_relative 'graphic_node'
   require_relative 'graphic_type'
   require_relative 'graphic_connection'
+  attr_accessor :scale, :distance, :node_size
   X=1280
   Y=1024
   def initialize(scene)

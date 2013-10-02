@@ -6,7 +6,7 @@ class ExpertTreeWindow < Qt::MainWindow
   require 'yaml'
 
   slots :close_program, :about, :switch_to_expert_mode, :switch_to_user_mode,
-        'start_consultation()', 'load_network_file()', 'save_network_file()'
+        'start_consultation()', 'load_network_file()', 'save_network_file()', 'show_scale(bool)', 'apply_scales()'
 
   def initialize(parent = nil)
     super(parent)
@@ -91,14 +91,78 @@ class ExpertTreeWindow < Qt::MainWindow
 
     # Add widgets to layout
     @tree_view = TreeView.new Qt::GraphicsScene.new
-    layout.addWidget @tree_view, 1, 0
+    layout.addWidget @tree_view, 1, 0, 1, 3
 
     start_button = Qt::PushButton.new(tr('Start Consultation'))
-    layout.addWidget start_button, 0, 0, 4
+    layout.addWidget start_button, 0, 1
     connect(start_button, SIGNAL('clicked()'), self, SLOT('start_consultation()'))
+
+    scale_button = Qt::PushButton.new(tr 'Show scale controls')
+    scale_button.checkable = true
+    scale_button.autoDefault = false
+    connect(scale_button, SIGNAL('toggled(bool)'), self, SLOT('show_scale(bool)'))
+    layout.addWidget scale_button, 0, 0
+
+    layout.addWidget create_view_controls, 2, 0, 1, 3
 
     @user_widget.layout=layout
     @user_widget
+  end
+
+  def create_view_controls
+    @scale_widget = Qt::GroupBox.new tr 'Scale controls'
+
+    @scale_values=[1, 8, 5]
+    scale_label = Qt::Label.new("#{tr 'Scale'} %d..%d:" % [@scale_values[0], @scale_values[1]])
+    @scale_box = Qt::SpinBox.new do |i|
+      i.range = @scale_values[0]..@scale_values[1]
+      i.singleStep = 1
+      i.value = @scale_values[2]
+    end
+
+    @distance_values=[10, 40, 18]
+    distance_label = Qt::Label.new("#{tr 'Distance'} %d..%d:" % [@distance_values[0], @distance_values[1]])
+    @distance_box = Qt::SpinBox.new do |i|
+      i.range = @distance_values[0]..@distance_values[1]
+      i.singleStep = 1
+      i.value = @distance_values[2]
+    end
+
+    @size_values=[1, 8, 5]
+    size_label = Qt::Label.new("#{tr 'Node size'} %d..%d:" % [@size_values[0], @size_values[1]])
+    @node_size_box = Qt::SpinBox.new do |i|
+      i.range = @size_values[0]..@size_values[1]
+      i.singleStep = 1
+      i.value = @size_values[2]
+    end
+
+    apply_button = Qt::PushButton.new(tr 'Apply scale')
+    connect(apply_button, SIGNAL('clicked()'), self, SLOT('apply_scales()'))
+
+    @extensionLayout = Qt::GridLayout.new
+    @extensionLayout.margin = 0
+    @extensionLayout.addWidget scale_label, 0, 0
+    @extensionLayout.addWidget @scale_box, 0, 1
+    @extensionLayout.addWidget distance_label, 0, 2
+    @extensionLayout.addWidget @distance_box, 0, 3
+    @extensionLayout.addWidget size_label, 0, 4
+    @extensionLayout.addWidget @node_size_box, 0, 5
+    @extensionLayout.addWidget apply_button, 0, 6
+
+    @scale_widget.layout=@extensionLayout
+    @scale_widget.setVisible false
+    @scale_widget
+  end
+
+  def apply_scales
+    @tree_view.scale=@scale_box.value
+    @tree_view.distance=@distance_box.value
+    @tree_view.node_size=@node_size_box.value
+    start_consultation
+  end
+
+  def show_scale(bool)
+    @scale_widget.setVisible bool
   end
 
   def create_expert_widget()
