@@ -2,18 +2,21 @@ require_relative 'network_structure'
 require_relative 'node'
 class NetworkLayout
 
-  def initialize structure
+  def initialize(structure)
     patch_classes
-
     @types = []
+    make_layout_from structure
+  end
+
+  def make_layout_from structure
     max_x=0
     structure.types.each_pair do |type_name, node_array|
       new_max_x=max_x+2
       @types << TypeLayout.new(
           type_name, node_array,
-          Position.new(max_x,0),
-          Position.new(new_max_x,node_array.length+1)
-          )
+          Position.new(max_x, 0),
+          Position.new(new_max_x, node_array.length+1)
+      )
       max_x=new_max_x
     end
   end
