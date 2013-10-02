@@ -69,7 +69,9 @@ class GraphicNode < Qt::GraphicsItem
   end
 
   def required_info
-    left=@node.required-@node.provided
+    left=(@node.required-@node.provided).map do |n|
+      tr n
+    end
     if left.empty?
       ''
     else
