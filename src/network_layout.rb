@@ -1,7 +1,7 @@
 require_relative 'network_structure'
 require_relative 'node'
 class NetworkLayout
-
+attr_reader :types
   def initialize(structure)
     patch_classes
     @types = []
@@ -26,11 +26,6 @@ class NetworkLayout
       attr_accessor :pos
     end
   end
-
-  def types
-    @types
-  end
-
 
   class TypeLayout < Array
     attr_reader :name, :top_left, :bot_right
