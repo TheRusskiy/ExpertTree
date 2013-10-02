@@ -1,11 +1,13 @@
 class TreeView < Qt::GraphicsView
   require_relative 'graphic_node'
+  require_relative 'graphic_type'
   X=1280
   Y=1024
   def initialize(scene)
     @graphic_items=[]
     @scale = 5
-    @distance=20
+    @distance=16
+    @node_size=6
     # initialize
     @scene =  scene
     @scene.setItemIndexMethod(-1)
@@ -36,10 +38,17 @@ class TreeView < Qt::GraphicsView
   def make_nodes
     max_y = 0
     @network.types.each do |type|
+      gt = GraphicType.new type, @distance
+      gt.setPos(type.top_left.x*@scale*@distance, type.top_left.y*@scale*@distance)
+      gt.setScale @scale
+      @scene.addItem gt
+      @graphic_items << gt
       type.each do |node|
-        gn = GraphicNode.new node
-        gn.setPos(node.pos.x*@scale*@distance, node.pos.y*@scale*@distance)
-        gn.setScale(@scale)
+        gn = GraphicNode.new node, @node_size
+        gn.setPos(
+            (node.pos.x*@distance-@node_size/2)*@scale,
+            (node.pos.y*@distance-@node_size/2)*@scale)
+        gn.setScale @scale
         @scene.addItem gn
         @graphic_items << gn
       end

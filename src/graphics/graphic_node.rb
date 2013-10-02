@@ -1,7 +1,8 @@
 class GraphicNode < Qt::GraphicsItem
-  def initialize node
+  def initialize node, node_size
     super(nil)
     @node = node
+    @node_size = node_size
 
     #@x1=0; @x2=0; @y1=10; @y2=20
     ##@boundingRect = Qt::RectF.new(0, 0,
@@ -9,7 +10,7 @@ class GraphicNode < Qt::GraphicsItem
     ##@boundingRect = Qt::RectF.new(0, 0,
     ##                              200, 200)
     #adj=5;
-    @boundingRect = Qt::RectF.new(0, 0, 20, 30);
+    @boundingRect = Qt::RectF.new(0, 0, @node_size, @node_size);
     #@black = Qt::Color.new(0, 20, 0)
     #@gray = Qt::Color.new(100, 100, 100)
     ##@brush = Qt::Brush.new(@black)
@@ -21,6 +22,7 @@ class GraphicNode < Qt::GraphicsItem
     #@passive_line_brush = Qt::Brush.new(@passive_color, 0)
     @text = Qt::GraphicsSimpleTextItem.new("", self)
     setCacheMode(0)
+    setZValue(2)
   end
 
   def boundingRect
@@ -34,7 +36,7 @@ class GraphicNode < Qt::GraphicsItem
 
   def paint(painter, arg, widget)
     painter.brush=@node.activated? ? @active_brush : @passive_brush
-    painter.drawEllipse(0, 0, 6, 6)
+    painter.drawEllipse(0, 0, @node_size, @node_size)
 
     #painter.brush=@node.activated? ? @active_line_brush : @passive_line_brush
     #path = Qt::PainterPath.new
