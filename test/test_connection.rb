@@ -40,5 +40,11 @@ class TestConnection < MiniTest::Unit::TestCase
     assert_equal @to.connections.length, 1
   end
 
+  def test_can_be_active
+    refute @conn.activated?
+    @conn.activate
+    assert @conn.activated?
+  end
+
 end
       

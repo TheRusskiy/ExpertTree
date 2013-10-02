@@ -1,15 +1,18 @@
 class TreeView < Qt::GraphicsView
   require_relative 'graphic_node'
   require_relative 'graphic_type'
+  require_relative 'graphic_connection'
   X=1280
   Y=1024
   def initialize(scene)
-    @graphic_items=[]
+    # size modifiers
     @scale = 5
     @distance=16
     @node_size=6
+
     # initialize
-    @scene =  scene
+    @graphic_items=[]
+    @scene = scene
     @scene.setItemIndexMethod(-1)
     @scene.setSceneRect(0, 0, X, Y)
     @scene.itemIndexMethod = Qt::GraphicsScene::NoIndex
@@ -31,11 +34,12 @@ class TreeView < Qt::GraphicsView
   def network_layout= network
     clear
     @network = network
-    make_nodes
+    draw_nodes
+    draw_connections
     @scene.invalidate
   end
 
-  def make_nodes
+  def draw_nodes
     max_y = 0
     @network.types.each do |type|
       gt = GraphicType.new type, @distance
@@ -58,6 +62,24 @@ class TreeView < Qt::GraphicsView
     max_x+=1 # just to be...
     max_y+=1 # ...sure it fits
     @scene.setSceneRect(0, 0, max_x*@scale*@distance, max_y*@scale*@distance)
+  end
+
+  def draw_connections
+    odd = false
+    @network.connections.each do |conn|
+      from_x = conn.from.pos.x
+      to_x = conn.to.pos.x
+      from_y = conn.from.pos.y
+      to_y = conn.to.pos.y
+      x = from_x < to_x ? from_x : to_x
+      y = from_y < to_y ? from_y : to_y
+      gc = GraphicConnection.new conn, @distance, x, y, odd
+      gc.setPos x*@scale*@distance, y*@scale*@distance
+      gc.setScale @scale
+      @scene.addItem gc
+      @graphic_items << gc
+      odd = !odd
+    end
   end
 
 end
