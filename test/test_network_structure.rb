@@ -23,7 +23,7 @@ class TestNetworkStructure < MiniTest::Unit::TestCase
 
   def test_connections
     conn = @builder.connections[1]
-    assert_equal @builder.connections.length, 8
+    assert_equal @builder.connections.length, 9
     assert_equal conn.class, Connection
     assert_equal conn.from.name, 'AMD 7970'
     assert_equal conn.to.name, '2048'

@@ -49,5 +49,9 @@ class TestNetworkLayout < MiniTest::Unit::TestCase
     assert_equal type[0].name, 'gaming'
   end
 
+  def test_has_connections
+    assert_equal @layout.connections.length, 9
+  end
+
 end
       

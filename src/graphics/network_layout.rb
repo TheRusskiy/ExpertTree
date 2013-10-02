@@ -3,14 +3,15 @@ require_relative '../model/node'
 class NetworkLayout
 attr_reader :types
   def initialize(structure)
+    @structure = structure
     patch_classes
     @types = []
-    make_layout_from structure
+    make_layout
   end
 
-  def make_layout_from structure
+  def make_layout
     max_x=0
-    structure.types.each_pair do |type_name, node_array|
+    @structure.types.each_pair do |type_name, node_array|
       new_max_x=max_x+2
       @types << TypeLayout.new(
           type_name, node_array,
@@ -25,6 +26,10 @@ attr_reader :types
     Node.class_eval do
       attr_accessor :pos
     end
+  end
+
+  def connections
+    @structure.connections
   end
 
   class TypeLayout < Array

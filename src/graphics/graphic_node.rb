@@ -1,37 +1,45 @@
 class GraphicNode < Qt::GraphicsItem
-  def initialize
+  def initialize node
     super(nil)
+    @node = node
 
-    @x1=0; @x2=0; @y1=10; @y2=20
-    #@boundingRect = Qt::RectF.new(0, 0,
-    #                              (x2-x1).abs, (y2-y1).abs)
-    #@boundingRect = Qt::RectF.new(0, 0,
-    #                              200, 200)
-    adj=5;
-    @boundingRect = Qt::RectF.new(@x1-adj, @y1-adj, @x2+adj, @y2+adj);
-    @black = Qt::Color.new(0, 20, 0)
-    @gray = Qt::Color.new(100, 100, 100)
-    #@brush = Qt::Brush.new(@black)
-    @pen = Qt::Pen.new(1)
-    @pen.setWidth(2)
-    #@pen.setCosmetic(true)
+    #@x1=0; @x2=0; @y1=10; @y2=20
+    ##@boundingRect = Qt::RectF.new(0, 0,
+    ##                              (x2-x1).abs, (y2-y1).abs)
+    ##@boundingRect = Qt::RectF.new(0, 0,
+    ##                              200, 200)
+    #adj=5;
+    @boundingRect = Qt::RectF.new(0, 0, 20, 30);
+    #@black = Qt::Color.new(0, 20, 0)
+    #@gray = Qt::Color.new(100, 100, 100)
+    ##@brush = Qt::Brush.new(@black)
+    @active_color = Qt::Color.new(255, 0, 0)
+    @passive_color = Qt::Color.new(100, 100, 100)
+    @active_brush = Qt::Brush.new(@active_color)
+    @passive_brush = Qt::Brush.new(@passive_color)
+    #@active_line_brush = Qt::Brush.new(@active_color, 0)
+    #@passive_line_brush = Qt::Brush.new(@passive_color, 0)
+    @text = Qt::GraphicsSimpleTextItem.new("", self)
+    setCacheMode(0)
   end
 
   def boundingRect
     return @boundingRect
   end
 
-  def paint(painter, arg, widget)
-    @pen.setWidth(2)
-    @pen.setColor(@gray)
-    @pen.setStyle(1)
-    painter.pen = @pen
-    painter.drawLine(@x1, @y1, @x2, @y2)
+  def mousePressEvent(event)
+    @node.activate
+    self.scene.invalidate
+  end
 
-    @pen.setWidth(0)
-    @pen.setColor(@black)
-    @pen.setStyle(2)
-    painter.pen = @pen
-    painter.drawLine(@x1, @y1, @x2, @y2)
+  def paint(painter, arg, widget)
+    painter.brush=@node.activated? ? @active_brush : @passive_brush
+    painter.drawEllipse(0, 0, 6, 6)
+
+    #painter.brush=@node.activated? ? @active_line_brush : @passive_line_brush
+    #path = Qt::PainterPath.new
+    #path.moveTo(3, 3);
+    #path.quadTo(10, 0, 30, 20);
+    #painter.drawPath path
   end
 end

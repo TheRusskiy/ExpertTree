@@ -105,19 +105,33 @@ connections:
       name: "3000"
   40:
     from:
+      type: "videocard"
+      name: "AMD 7970"
+    to:
+      type: "price less than"
+      name: "8000"
+  41:
+    from:
+      type: "videocard"
+      name: "AMD 5870"
+    to:
+      type: "price less than"
+      name: "16000"
+  50:
+    from:
       type: "profiles"
       name: "gaming"
     to:
       type: "frequency"
       name: "3000"
-  41:
+  51:
     from:
       type: "profiles"
       name: "gaming"
     to:
       type: "memory"
       name: "1024"
-  41:
+  52:
     from:
       type: "profiles"
       name: "gaming"

@@ -50,7 +50,7 @@ class ExpertTreeWindow < Qt::MainWindow
   def start_consultation
     @tree_view.clear
     system = create_expert_system
-    @tree_view.network=system unless system.nil?
+    @tree_view.network_layout=system unless system.nil?
   end
 
   def save_network_file(path = nil)
