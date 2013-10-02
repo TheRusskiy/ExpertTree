@@ -1,4 +1,6 @@
 require_relative 'node'
+require_relative 'connection'
+require_relative 'network_parser'
 class NetworkStructure
   def  initialize parser
     @parser=parser

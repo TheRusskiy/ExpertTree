@@ -2,6 +2,7 @@
 class ExpertTreeWindow < Qt::MainWindow
   require_relative 'network_layout'
   require_relative 'highlighter'
+  require_relative 'tree_view'
   require 'yaml'
 
   slots :close_program, :about, :switch_to_expert_mode, :switch_to_user_mode,
@@ -10,7 +11,7 @@ class ExpertTreeWindow < Qt::MainWindow
   def initialize(parent = nil)
     super(parent)
     #initialize:
-    setWindowTitle(tr "Semantic tree expert system")
+    setWindowTitle(tr 'Semantic tree expert system')
     create_actions
     create_menus
     create_status_bar
@@ -23,18 +24,18 @@ class ExpertTreeWindow < Qt::MainWindow
     @w.layout.addWidget(create_expert_widget, 0, 0)
 
     #set correct state:
-    resize(600, 400)
-    load_network_file 'network_file.yml' if File.exist? ('network_file.yml')
+    resize(900, 450)
+    path = './resources/network_file.yml'
+    load_network_file path if File.exist? path
     switch_to_user_mode
   end
 
   def create_expert_system
     begin
-      NetworkLayout.new NetworkStructure.new NetworkParser.new @rule_editor.plainText
-      true
+      NetworkLayout.new NetworkStructure.new NetworkParser.new @network_editor.plainText
     rescue Exception
       show_warning tr "Can't parse rules"
-      false
+      nil
     end
   end
 
@@ -47,7 +48,9 @@ class ExpertTreeWindow < Qt::MainWindow
   end
 
   def start_consultation
-    #todo
+    @tree_view.clear
+    system = create_expert_system
+    @tree_view.network=system unless system.nil?
   end
 
   def save_network_file(path = nil)
@@ -56,7 +59,7 @@ class ExpertTreeWindow < Qt::MainWindow
                                            tr('Save File'),
                                            filled_name,
                                            tr('YAML files (*.yml)'))
-    text = @rule_editor.plainText
+    text = @network_editor.plainText
     file = File.open path, 'w:utf-8'
     file.write text
     file.close
@@ -79,7 +82,7 @@ class ExpertTreeWindow < Qt::MainWindow
   end
 
   def set_rule_text text
-    @rule_editor.plainText= text
+    @network_editor.plainText= text
   end
 
   def create_user_widget()
@@ -87,6 +90,9 @@ class ExpertTreeWindow < Qt::MainWindow
     layout = Qt::GridLayout.new
 
     # Add widgets to layout
+    @tree_view = TreeView.new Qt::GraphicsScene.new
+    layout.addWidget @tree_view, 1, 0
+
     start_button = Qt::PushButton.new(tr('Start Consultation'))
     layout.addWidget start_button, 0, 0, 4
     connect(start_button, SIGNAL('clicked()'), self, SLOT('start_consultation()'))
@@ -101,8 +107,8 @@ class ExpertTreeWindow < Qt::MainWindow
 
     # Add widgets to layout
     frameStyle = Qt::Frame::Sunken | Qt::Frame::Panel
-    @rule_editor = setup_editor
-    @rule_editor.frameStyle = frameStyle
+    @network_editor = setup_editor
+    @network_editor.frameStyle = frameStyle
 
     load_button = Qt::PushButton.new(tr('Load network file'))
     load_button.statusTip = tr 'Load network file' # todo more informative tip?
@@ -117,7 +123,7 @@ class ExpertTreeWindow < Qt::MainWindow
 
     layout.addWidget load_button, 0, 0
     layout.addWidget save_button, 0, 1
-    layout.addWidget @rule_editor, 1, 0, 1, 2
+    layout.addWidget @network_editor, 1, 0, 1, 2
 
     @expert_widget.layout=layout
     @expert_widget
@@ -129,10 +135,6 @@ class ExpertTreeWindow < Qt::MainWindow
     commentFormat.foreground = Qt::Brush.new(Qt::Color.new("#8b3d06"))
     highlighter.addMapping('#.*', commentFormat)
 
-    #valueFormat = Qt::TextCharFormat.new
-    #valueFormat.foreground = Qt::Brush.new(Qt::Color.new("#008200"))
-    #highlighter.addMapping('".*"', valueFormat)
-
     keysFormat = Qt::TextCharFormat.new
     keysFormat.fontWeight = Qt::Font::Bold
     keysFormat.foreground = Qt::Brush.new(Qt::Color.new("#0000ff"))
@@ -142,10 +144,6 @@ class ExpertTreeWindow < Qt::MainWindow
     keywordsFormat.fontWeight = Qt::Font::Bold
     keywordsFormat.foreground = Qt::Brush.new(Qt::Color.new("#ff587c"))
     highlighter.addMapping("((nodes)|(connections)):", keywordsFormat)
-
-    #commentFormat.fontWeight = Qt::Font::Bold
-    #keyFormat.background = Qt::Brush.new(Qt::Color.new("#ffe24f"))
-    #functionFormat.fontItalic = true
 
     font = Qt::Font.new
     font.family = "Courier"

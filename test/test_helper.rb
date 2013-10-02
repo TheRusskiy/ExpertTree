@@ -2,11 +2,11 @@
 require 'minitest/autorun'
 require 'minitest/reporters'
 MiniTest::Reporters.use! MiniTest::Reporters::RubyMineReporter.new
-require_relative '../src/node'
-require_relative '../src/connection'
-require_relative '../src/network_parser'
-require_relative '../src/network_structure'
-require_relative '../src/network_layout'
+require_relative '../src/model/node'
+require_relative '../src/model/connection'
+require_relative '../src/model/network_parser'
+require_relative '../src/model/network_structure'
+require_relative '../src/graphics/network_layout'
 
 module Helper
   def self.file_fixture

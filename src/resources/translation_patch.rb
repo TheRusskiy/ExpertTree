@@ -20,4 +20,4 @@ class Object
 end
 
 require 'yaml'
-Object.translation_map = YAML::load File.open('../src/translation.yml')
+Object.translation_map = YAML::load File.open('../src/resources/translation.yml')

@@ -1,5 +1,5 @@
-require_relative 'network_structure'
-require_relative 'node'
+require_relative '../model/network_structure'
+require_relative '../model/node'
 class NetworkLayout
 attr_reader :types
   def initialize(structure)
