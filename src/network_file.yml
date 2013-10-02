@@ -1,0 +1,126 @@
+# Nodes divided into types
+# Each node can have fields required for activation
+nodes:
+  profiles:
+    1:
+      name: "gaming"
+      required:
+        1: "frequency"
+        2: "memory"
+    2:
+      name: "work"
+      required:
+        1: "frequency"
+        2: "memory"
+  memory:
+    1:
+      name: "512"
+    2:
+      name: "1024"
+    3:
+      name: "2048"
+  bus:
+    1:
+      name: "pci-e 2.0"
+    2:
+      name: "pci-e 3.0"
+  frequency:
+    1:
+      name: "2000"
+    2:
+      name: "3000"
+  videocard:
+    1:
+      name: "AMD 5870"
+      required:
+        1: "bus"
+        2: "memory"
+        3: "frequency"
+    2:
+      name: "AMD 7970"
+      required:
+        1: "bus"
+        2: "memory"
+        3: "frequency"
+  price less than:
+    1:
+      name: "2000"
+    2:
+      name: "3000"
+    3:
+      name: "4000"
+    4:
+      name: "6000"
+    5:
+      name: "8000"
+    6:
+      name: "10000"
+    7:
+      name: "12000"
+    8:
+      name: "16000"
+# Connections from one node to another
+connections:
+  10:
+    from:
+      type: "videocard"
+      name: "AMD 5870"
+    to:
+      type: "memory"
+      name: "1024"
+  11:
+    from:
+      type: "videocard"
+      name: "AMD 7970"
+    to:
+      type: "memory"
+      name: "2048"
+  20:
+    from:
+      type: "videocard"
+      name: "AMD 5870"
+    to:
+      type: "bus"
+      name: "pci-e 2.0"
+  21:
+    from:
+      type: "videocard"
+      name: "AMD 7970"
+    to:
+      type: "bus"
+      name: "pci-e 2.0"
+  30:
+    from:
+      type: "videocard"
+      name: "AMD 5870"
+    to:
+      type: "frequency"
+      name: "2000"
+  31:
+    from:
+      type: "videocard"
+      name: "AMD 7970"
+    to:
+      type: "frequency"
+      name: "3000"
+  40:
+    from:
+      type: "profiles"
+      name: "gaming"
+    to:
+      type: "frequency"
+      name: "3000"
+  41:
+    from:
+      type: "profiles"
+      name: "gaming"
+    to:
+      type: "memory"
+      name: "1024"
+  41:
+    from:
+      type: "profiles"
+      name: "gaming"
+    to:
+      type: "memory"
+      name: "2048"
