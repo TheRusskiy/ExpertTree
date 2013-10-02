@@ -7,8 +7,8 @@ class TreeView < Qt::GraphicsView
   def initialize(scene)
     # size modifiers
     @scale = 5
-    @distance=16
-    @node_size=6
+    @distance=18
+    @node_size=5
 
     # initialize
     @graphic_items=[]
@@ -48,7 +48,7 @@ class TreeView < Qt::GraphicsView
       @scene.addItem gt
       @graphic_items << gt
       type.each do |node|
-        gn = GraphicNode.new node, @node_size
+        gn = GraphicNode.new node, @node_size, @distance
         gn.setPos(
             (node.pos.x*@distance-@node_size/2)*@scale,
             (node.pos.y*@distance-@node_size/2)*@scale)

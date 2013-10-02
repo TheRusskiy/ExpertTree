@@ -1,5 +1,5 @@
 class Node
-  attr_reader :name, :type, :connections
+  attr_reader :name, :type, :connections, :required, :provided
   def initialize name, type
     @name=name
     @type=type
@@ -33,10 +33,6 @@ class Node
     else
       @required << property
     end
-  end
-
-  def required
-    @required
   end
 
   def connect property

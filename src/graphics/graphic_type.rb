@@ -12,13 +12,19 @@ class GraphicType < Qt::GraphicsItem
     @main_color = Qt::Color.new(200, 200, 200)
     @second_color = Qt::Color.new(100, 100, 100)
     @brush = Qt::Brush.new(@main_color)
-    @text = Qt::GraphicsSimpleTextItem.new("", self)
+    create_text
     setCacheMode(0)
     setZValue(1)
   end
 
   def boundingRect
     return @boundingRect
+  end
+
+  def create_text
+    @text = Qt::GraphicsSimpleTextItem.new(@type.name.capitalize, self)
+    @text.setScale(1.0/scale/3)
+    @text.setPos(5, 0)
   end
 
   def paint(painter, arg, widget)
