@@ -12,6 +12,7 @@ class Object
     translation = Object.translation_map[text.downcase]
     if translation.nil?
       puts "Translation for '#{text}' wasn't found!"
+      Object.translation_map[text.downcase]=text
       text
     else
       translation
