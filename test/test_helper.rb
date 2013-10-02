@@ -6,9 +6,11 @@ require_relative '../src/node'
 require_relative '../src/connection'
 require_relative '../src/network_parser'
 require_relative '../src/network_structure'
+require_relative '../src/network_layout'
+
 module Helper
   def self.file_fixture
-     @file||=File.open('../test/network_fixture.yml').reduce :+
+     @@file||=File.open('../test/network_fixture.yml', 'r:utf-8').reduce :+
   end
 end
 

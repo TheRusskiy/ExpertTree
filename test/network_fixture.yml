@@ -1,4 +1,15 @@
 nodes:
+  profiles:
+    1:
+      name: "gaming"
+      required:
+        1: "frequency"
+        2: "memory"
+    2:
+      name: "work"
+      required:
+        1: "frequency"
+        2: "memory"
   memory:
     1:
       name: "512"
@@ -16,13 +27,6 @@ nodes:
       name: "2000"
     2:
       name: "3000"
-  price less than:
-    1:
-      name: "200"
-    2:
-      name: "300"
-    3:
-      name: "1000"
   videocard:
     1:
       name: "AMD 5870"
@@ -36,17 +40,23 @@ nodes:
         1: "bus"
         2: "memory"
         3: "frequency"
-  profiles:
+  price less than:
     1:
-      name: "gaming"
-      required:
-        1: "frequency"
-        2: "memory"
+      name: "2000"
     2:
-      name: "work"
-      required:
-        1: "frequency"
-        2: "memory"
+      name: "3000"
+    3:
+      name: "4000"
+    4:
+      name: "6000"
+    5:
+      name: "8000"
+    6:
+      name: "10000"
+    7:
+      name: "12000"
+    8:
+      name: "16000"
 connections:
   10:
     from:

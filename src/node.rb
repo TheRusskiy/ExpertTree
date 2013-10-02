@@ -45,7 +45,7 @@ class Node
   end
 
   def to_s
-    @name+(@activated ? ': activated' : '')
+    "Node '#{@name}' active: #{@activated.to_s}"
   end
 
 end
