@@ -58,7 +58,7 @@ class GraphicNode < Qt::GraphicsItem
   end
 
   def create_text
-    name_info = @node.name.capitalize
+    name_info = @node.name#.capitalize
     @name = Qt::GraphicsSimpleTextItem.new(name_info, self)
     @name.setScale(1.0/scale/4)
     @name.setPos(-@distance+3, 0)
@@ -70,7 +70,7 @@ class GraphicNode < Qt::GraphicsItem
 
   def required_info
     left=(@node.required-@node.provided).map do |n|
-      tr n
+      tr(n).capitalize
     end
     if left.empty?
       ''

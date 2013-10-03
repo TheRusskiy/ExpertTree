@@ -22,7 +22,7 @@ class GraphicType < Qt::GraphicsItem
   end
 
   def create_text
-    @text = Qt::GraphicsSimpleTextItem.new(tr(@type.name), self)
+    @text = Qt::GraphicsSimpleTextItem.new(tr(@type.name).capitalize, self)
     @text.setScale(1.0/scale/3)
     @text.setPos(5, 0)
   end

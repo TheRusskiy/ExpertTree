@@ -13,6 +13,8 @@ nodes:
         1: "frequency"
         2: "memory"
   memory:
+    0:
+      name: "256"
     1:
       name: "512"
     2:
@@ -26,17 +28,25 @@ nodes:
       name: "pci-e 3.0"
   frequency:
     1:
-      name: "2000"
+      name: "1000"
     2:
+      name: "2000"
+    3:
       name: "3000"
   videocard:
     1:
-      name: "AMD 5870"
+      name: "GT 450"
       required:
         1: "bus"
         2: "memory"
         3: "frequency"
     2:
+      name: "AMD 5870"
+      required:
+        1: "bus"
+        2: "memory"
+        3: "frequency"
+    3:
       name: "AMD 7970"
       required:
         1: "bus"
@@ -75,6 +85,13 @@ connections:
     to:
       type: "memory"
       name: "2048"
+  12:
+    from:
+      type: "videocard"
+      name: "GT 450"
+    to:
+      type: "memory"
+      name: "512"
   20:
     from:
       type: "videocard"
@@ -86,6 +103,13 @@ connections:
     from:
       type: "videocard"
       name: "AMD 7970"
+    to:
+      type: "bus"
+      name: "pci-e 3.0"
+  22:
+    from:
+      type: "videocard"
+      name: "GT 450"
     to:
       type: "bus"
       name: "pci-e 2.0"
@@ -103,6 +127,13 @@ connections:
     to:
       type: "frequency"
       name: "3000"
+  32:
+    from:
+      type: "videocard"
+      name: "GT 450"
+    to:
+      type: "frequency"
+      name: "1000"
   40:
     from:
       type: "videocard"
@@ -117,6 +148,13 @@ connections:
     to:
       type: "price less than"
       name: "8000"
+  42:
+    from:
+      type: "videocard"
+      name: "GT 450"
+    to:
+      type: "price less than"
+      name: "4000"
   50:
     from:
       type: "profiles"
@@ -138,3 +176,24 @@ connections:
     to:
       type: "memory"
       name: "2048"
+  53:
+    from:
+      type: "profiles"
+      name: "work"
+    to:
+      type: "frequency"
+      name: "1000"
+  54:
+    from:
+      type: "profiles"
+      name: "work"
+    to:
+      type: "memory"
+      name: "256"
+  55:
+    from:
+      type: "profiles"
+      name: "work"
+    to:
+      type: "memory"
+      name: "512"
