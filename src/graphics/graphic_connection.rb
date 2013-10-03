@@ -33,7 +33,7 @@ class GraphicConnection < Qt::GraphicsItem
     @passive_pen.setColor Qt::Color.new(20, 20, 20)
     #noinspection RubyArgCount
     @highlight_pen = Qt::Pen.new
-    @highlight_pen.setColor Qt::Color.new(0, 0, 255)
+    @highlight_pen.setColor Qt::Color.new(0, 160, 0)
     setCacheMode(0)
     setZValue(3)
   end

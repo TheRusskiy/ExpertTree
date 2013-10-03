@@ -18,7 +18,7 @@ class GraphicNode < Qt::GraphicsItem
     @boundingRect = Qt::RectF.new(0, 0, @node_size, @node_size)
     @active_brush = Qt::Brush.new(Qt::Color.new(255, 0, 0))
     @passive_brush = Qt::Brush.new(Qt::Color.new(100, 100, 100))
-    @highlight_brush = Qt::Brush.new(Qt::Color.new(0, 0, 255))
+    @highlight_brush = Qt::Brush.new(Qt::Color.new(0, 255, 0))
     @text_brush = Qt::Brush.new(Qt::Color.new(0, 0, 0))
 
     create_text
