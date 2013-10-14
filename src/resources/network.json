@@ -1,0 +1,69 @@
+{
+    "nodes" : {
+        "profiles" : [
+            {"name" : "gaming",
+             "required":["frequency", "memory"]
+            },
+            {"name" : "work",
+             "required" : ["frequency", "memory"]
+            }
+        ],
+        "memory" : [
+            {"name" : "256"},
+            {"name" : "512"},
+            {"name" : "1024"},
+            {"name" : "2048"}
+        ],
+        "bus" : [
+            {"name" : "pci-e 2.0"},
+            {"name" : "pci-e 3.0"}
+        ],
+        "frequency" : [
+            {"name" : "1000"},
+            {"name" : "2000"},
+            {"name" : "3000"},
+            {"name" : "4000"}
+        ],
+        "videocard" : [
+            {
+                "name" : "GT 450",
+                "required" : ["bus", "memory", "frequency"]
+            },
+            {
+                "name" : "AMD 5870",
+                "required" : ["bus", "memory", "frequency"]
+            },
+            {
+                "name" : "AMD 7970",
+                "required" : ["bus", "memory", "frequency"]},
+            {
+                "name" : "Nvidia Titan",
+                "required" : ["bus", "memory", "frequency"]
+            }
+        ],
+        "price" : [
+            {"name" : "2000"},
+            {"name" : "4000"},
+            {"name" : "6000"},
+            {"name" : "8000"},
+            {"name" : "10000"},
+            {"name" : "12000"},
+            {"name" : "14000"},
+            {"name" : "16000"}
+        ]
+    },
+    "connections" : [
+        [
+            {"type":"videocard",
+            "name":"AMD 5870"},
+            {"type":"memory",
+            "name":"1024"}
+        ],
+        [
+            {"type":"videocard",
+            "name":"AMD 7970"},
+            {"type":"memory",
+            "name":"2048"}
+        ]
+    ]
+}
