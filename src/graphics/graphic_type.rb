@@ -1,6 +1,7 @@
 class GraphicType < Qt::GraphicsItem
   def initialize type, multiplier
     super(nil)
+    @multiplier = multiplier
     @type = type
     @x = type.bot_right.x-type.top_left.x
     @y = type.bot_right.y-type.top_left.y
@@ -28,6 +29,7 @@ class GraphicType < Qt::GraphicsItem
   end
 
   def paint(painter, arg, widget)
+    setPos(@type.top_left.x*scale*@multiplier, @type.top_left.y*scale*@multiplier)
     painter.brush=@brush
     painter.drawRect(0, 0, @x, @y)
   end

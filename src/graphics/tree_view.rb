@@ -44,7 +44,6 @@ class TreeView < Qt::GraphicsView
     max_y = 0
     @network.types.each do |type|
       gt = GraphicType.new type, @distance
-      gt.setPos(type.top_left.x*@scale*@distance, type.top_left.y*@scale*@distance)
       gt.setScale @scale
       @scene.addItem gt
       @graphic_items << gt
