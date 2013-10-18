@@ -6,7 +6,7 @@ class ExpertTreeWindow < Qt::MainWindow
   require 'yaml'
 
   slots :close_program, :about, :switch_to_expert_mode, :switch_to_user_mode,
-        'start_consultation()', 'load_network_file()', 'save_network_file()', 'show_scale(bool)', 'apply_scales()'
+        'start_consultation()', 'load_network_file()', 'save_network_file()', 'show_scale(bool)', 'apply_scales()', 'show_editor()', 'add_node_row()', 'add_connection_row()'
 
   def initialize(parent = nil)
     super(parent)
@@ -27,6 +27,7 @@ class ExpertTreeWindow < Qt::MainWindow
     resize(900, 450)
     path = './resources/network_file.yml'
     load_network_file path if File.exist? path
+    fill_tables
     switch_to_user_mode
   end
 
@@ -85,7 +86,7 @@ class ExpertTreeWindow < Qt::MainWindow
     @network_editor.plainText= text
   end
 
-  def create_user_widget()
+  def create_user_widget
     @user_widget = Qt::GroupBox.new tr 'User mode'
     layout = Qt::GridLayout.new
 
@@ -165,7 +166,7 @@ class ExpertTreeWindow < Qt::MainWindow
     @scale_widget.setVisible bool
   end
 
-  def create_expert_widget()
+  def create_expert_widget
     @expert_widget = Qt::GroupBox.new tr 'Expert Mode'
     layout = Qt::GridLayout.new
 
@@ -184,13 +185,25 @@ class ExpertTreeWindow < Qt::MainWindow
     save_button.shortcut = Qt::KeySequence.new( 'Ctrl+S' )
     connect(save_button, SIGNAL('clicked()'), self, SLOT('save_network_file()'))
 
+    show_editor_button = Qt::PushButton.new(tr('Show editor'))
+    show_editor_button.statusTip = tr 'Show rule text editor'
+    connect(show_editor_button, SIGNAL('clicked()'), self, SLOT('show_editor()'))
 
+    @table_widget = create_rule_table_widget
     layout.addWidget load_button, 0, 0
     layout.addWidget save_button, 0, 1
-    layout.addWidget @network_editor, 1, 0, 1, 2
+    layout.addWidget show_editor_button, 0, 2
+    layout.addWidget @table_widget, 1, 0, 1, 3
+    layout.addWidget @network_editor, 2, 0, 1, 3
+    @network_editor.visible=false
 
     @expert_widget.layout=layout
     @expert_widget
+  end
+
+  def show_editor
+    @network_editor.visible= !@network_editor.visible
+    @table_widget.visible= !@table_widget.visible
   end
 
   def setup_editor
@@ -218,6 +231,118 @@ class ExpertTreeWindow < Qt::MainWindow
     editor.font = font
     highlighter.addToDocument(editor.document())
     editor
+  end
+
+  def fill_tables
+    parser = NetworkParser.new @network_editor.plainText
+    fill_node_table parser.types
+  end
+
+  def fill_node_table types
+    clear_table @node_model
+    row_number = 0
+    types.each_pair do |type, nodes|
+      nodes.each do |node|
+        add_node_row
+        set_model_data @node_model, row_number, 0, type
+        set_model_data @node_model, row_number, 1, node['name']
+        required = node['required']
+        required = required.nil? ? '' : required * '|'
+        set_model_data @node_model, row_number, 2, required
+        row_number = row_number + 1
+      end
+    end
+    s=1
+  end
+
+  def create_rule_table_widget
+    table_widget = Qt::GroupBox.new tr 'Rule table'
+    layout = Qt::GridLayout.new
+
+    # Add widgets to layout
+
+
+    layout.addWidget create_node_table, 0,0
+    layout.addWidget create_connection_table, 0,1
+
+    table_widget.layout=layout
+    table_widget
+  end
+
+  def create_node_table
+    table_widget = Qt::GroupBox.new
+    layout = Qt::GridLayout.new
+
+    @node_model = Qt::StandardItemModel.new(0, 3, self)
+    @node_model.setHeaderData(0, Qt::Horizontal, Qt::Variant.new(tr("Type")))
+    @node_model.setHeaderData(1, Qt::Horizontal, Qt::Variant.new(tr("Name")))
+    @node_model.setHeaderData(2, Qt::Horizontal, Qt::Variant.new(tr("Required")))
+    table = Qt::TableView.new
+    table.model = @node_model
+
+    add_node_button = Qt::PushButton.new tr 'Add row'
+    connect(add_node_button, SIGNAL('clicked()'), self, SLOT('add_node_row()'))
+
+    layout.addWidget table, 0,0,1,2
+    layout.addWidget add_node_button, 1,0
+    table_widget.layout=layout
+    table_widget
+  end
+
+  def add_node_row
+    @node_model.insertRow @node_model.rowCount
+  end
+
+  def set_model_data(model, index1, index2, value)
+    model.setData(model.index(index1, index2, Qt::ModelIndex.new),
+                   qVariantFromValue(value))
+  end
+
+  def get_model_data
+    @node_model.takeRow(0)[0].text
+    @node_model.takeItem(0,1).text
+    @node_model.item(0,0).text
+  end
+
+  def create_connection_table
+    table_widget = Qt::GroupBox.new
+    layout = Qt::GridLayout.new
+
+    model = Qt::StandardItemModel.new(0, 3, self)
+    model.setHeaderData(0, Qt::Horizontal, Qt::Variant.new(tr("Assigned")))
+    model.setHeaderData(1, Qt::Horizontal, Qt::Variant.new(tr("Time left")))
+    model.setHeaderData(2, Qt::Horizontal, Qt::Variant.new(tr("Car type")))
+    table = Qt::TableView.new
+    table.model = model
+
+    add_node_button = Qt::PushButton.new tr 'Add row'
+    connect(add_node_button, SIGNAL('clicked()'), self, SLOT('add_node_row()'))
+
+    layout.addWidget table, 0,0,1,2
+    layout.addWidget add_node_button, 1,0
+    table_widget.layout=layout
+    table_widget
+  end
+
+  def add_connection_row
+
+  end
+
+  def clear_table model
+    prev_count = model.rowCount
+    for i in 0..prev_count do
+      model.removeRow(0)
+    end
+  end
+
+  def createTableRows(model, count)
+    prev_count = model.rowCount
+    for i in 0..prev_count do
+      model.removeRow(0)
+    end
+    for i in 0...count do
+      model.insertRow(0)
+    end
   end
 
   def create_actions

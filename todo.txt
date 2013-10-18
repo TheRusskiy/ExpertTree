@@ -1,10 +1,11 @@
 todo this todo
 visual:
     1. keep history of states (for ctrl+z, ctrl+shift+z)
-    2. gui for making rules
+    2. gui for making rules (table)
     3. move groups (make setPos dynamic)
 
 functional:
     1. bi/single directional connections
     2. json support
     3. make profiles inaccessible (replace all attributes with one special)
+    4. add more information
