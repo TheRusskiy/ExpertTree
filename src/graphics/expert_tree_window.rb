@@ -175,6 +175,11 @@ class ExpertTreeWindow < Qt::MainWindow
     @network_editor = setup_editor
     @network_editor.frameStyle = frameStyle
 
+    @network_editor_widget = Qt::GroupBox.new tr 'Rule Editor'
+    editor_layout = Qt::GridLayout.new
+    editor_layout.addWidget @network_editor, 0, 0
+    @network_editor_widget.layout = editor_layout
+
     load_button = Qt::PushButton.new(tr('Load network file'))
     load_button.statusTip = tr 'Load network file' # todo more informative tip?
     load_button.shortcut = Qt::KeySequence.new( 'Ctrl+O' )
@@ -194,16 +199,18 @@ class ExpertTreeWindow < Qt::MainWindow
     layout.addWidget save_button, 0, 1
     layout.addWidget show_editor_button, 0, 2
     layout.addWidget @table_widget, 1, 0, 1, 3
-    layout.addWidget @network_editor, 2, 0, 1, 3
-    @network_editor.visible=false
+    layout.addWidget @network_editor_widget, 2, 0, 1, 3
+    @network_editor_widget.visible=false
 
     @expert_widget.layout=layout
     @expert_widget
   end
 
   def show_editor
-    @network_editor.visible= !@network_editor.visible
-    @table_widget.visible= !@table_widget.visible
+    editor_visible = !@network_editor_widget.visible
+    @network_editor_widget.visible= editor_visible
+    @table_widget.visible= !editor_visible
+    fill_tables unless editor_visible
   end
 
   def setup_editor
@@ -236,6 +243,7 @@ class ExpertTreeWindow < Qt::MainWindow
   def fill_tables
     parser = NetworkParser.new @network_editor.plainText
     fill_node_table parser.types
+    fill_connection_table parser.connections
   end
 
   def fill_node_table types
@@ -252,7 +260,19 @@ class ExpertTreeWindow < Qt::MainWindow
         row_number = row_number + 1
       end
     end
-    s=1
+  end
+
+  def fill_connection_table connections
+    clear_table @connection_model
+    row_number = 0
+    connections.each do |conn|
+      add_connection_row
+      set_model_data @connection_model, row_number, 0, conn['from']['type']
+      set_model_data @connection_model, row_number, 1, conn['from']['name']
+      set_model_data @connection_model, row_number, 2, conn['to']['type']
+      set_model_data @connection_model, row_number, 3, conn['to']['name']
+      row_number = row_number + 1
+      end
   end
 
   def create_rule_table_widget
@@ -308,15 +328,16 @@ class ExpertTreeWindow < Qt::MainWindow
     table_widget = Qt::GroupBox.new
     layout = Qt::GridLayout.new
 
-    model = Qt::StandardItemModel.new(0, 3, self)
-    model.setHeaderData(0, Qt::Horizontal, Qt::Variant.new(tr("Assigned")))
-    model.setHeaderData(1, Qt::Horizontal, Qt::Variant.new(tr("Time left")))
-    model.setHeaderData(2, Qt::Horizontal, Qt::Variant.new(tr("Car type")))
+    @connection_model = Qt::StandardItemModel.new(0, 4, self)
+    @connection_model.setHeaderData(0, Qt::Horizontal, Qt::Variant.new(tr("From type")))
+    @connection_model.setHeaderData(1, Qt::Horizontal, Qt::Variant.new(tr("name")))
+    @connection_model.setHeaderData(2, Qt::Horizontal, Qt::Variant.new(tr("To type")))
+    @connection_model.setHeaderData(3, Qt::Horizontal, Qt::Variant.new(tr("name")))
     table = Qt::TableView.new
-    table.model = model
+    table.model = @connection_model
 
     add_node_button = Qt::PushButton.new tr 'Add row'
-    connect(add_node_button, SIGNAL('clicked()'), self, SLOT('add_node_row()'))
+    connect(add_node_button, SIGNAL('clicked()'), self, SLOT('add_connection_row()'))
 
     layout.addWidget table, 0,0,1,2
     layout.addWidget add_node_button, 1,0
@@ -325,7 +346,7 @@ class ExpertTreeWindow < Qt::MainWindow
   end
 
   def add_connection_row
-
+    @connection_model.insertRow @connection_model.rowCount
   end
 
   def clear_table model
