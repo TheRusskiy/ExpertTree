@@ -5,13 +5,11 @@ nodes:
     1:
       name: "gaming"
       required:
-        1: "frequency"
-        2: "memory"
+        1: "blocked"
     2:
       name: "work"
       required:
-        1: "frequency"
-        2: "memory"
+        1: "blocked"
   memory:
     0:
       name: "256"

@@ -6,7 +6,7 @@ class ExpertTreeWindow < Qt::MainWindow
   require 'yaml'
 
   slots :close_program, :about, :switch_to_expert_mode, :switch_to_user_mode,
-        'start_consultation()', 'load_network_file()', 'save_network_file()', 'show_scale(bool)', 'apply_scales()', 'show_editor()', 'add_node_row()', 'add_connection_row()'
+        'start_consultation()', 'load_network_file()', 'save_network_file()', 'show_scale(bool)', 'apply_scales()', 'show_editor()', 'add_node_row()', 'add_connection_row()', 'fill_editor_from_tables()'
 
   def initialize(parent = nil)
     super(parent)
@@ -190,16 +190,21 @@ class ExpertTreeWindow < Qt::MainWindow
     save_button.shortcut = Qt::KeySequence.new( 'Ctrl+S' )
     connect(save_button, SIGNAL('clicked()'), self, SLOT('save_network_file()'))
 
-    show_editor_button = Qt::PushButton.new(tr('Show editor'))
-    show_editor_button.statusTip = tr 'Show rule text editor'
-    connect(show_editor_button, SIGNAL('clicked()'), self, SLOT('show_editor()'))
+    @show_editor_button = Qt::PushButton.new(tr('Show editor'))
+    @show_editor_button.statusTip = tr 'Show rule text editor'
+    connect(@show_editor_button, SIGNAL('clicked()'), self, SLOT('show_editor()'))
+
+    save_table_changes_button = Qt::PushButton.new(tr('Save table changes'))
+    save_table_changes_button.statusTip = tr 'Save table changes'
+    connect(save_table_changes_button, SIGNAL('clicked()'), self, SLOT('fill_editor_from_tables()'))
 
     @table_widget = create_rule_table_widget
     layout.addWidget load_button, 0, 0
     layout.addWidget save_button, 0, 1
-    layout.addWidget show_editor_button, 0, 2
-    layout.addWidget @table_widget, 1, 0, 1, 3
-    layout.addWidget @network_editor_widget, 2, 0, 1, 3
+    layout.addWidget @show_editor_button, 0, 2
+    layout.addWidget save_table_changes_button, 0, 3
+    layout.addWidget @table_widget, 1, 0, 1, 4
+    layout.addWidget @network_editor_widget, 2, 0, 1, 4
     @network_editor_widget.visible=false
 
     @expert_widget.layout=layout
@@ -208,9 +213,11 @@ class ExpertTreeWindow < Qt::MainWindow
 
   def show_editor
     editor_visible = !@network_editor_widget.visible
+    @show_editor_button.text = editor_visible ? tr('Show table') : tr('Show editor')
     @network_editor_widget.visible= editor_visible
     @table_widget.visible= !editor_visible
     fill_tables unless editor_visible
+    fill_editor_from_tables if editor_visible
   end
 
   def setup_editor
@@ -275,6 +282,52 @@ class ExpertTreeWindow < Qt::MainWindow
       end
   end
 
+  def fill_editor_from_tables
+    set_rule_text(
+        {
+            "nodes"=>node_hash_from_table,
+            "connections"=> connection_hash_from_table
+        }.to_yaml
+    )
+  end
+
+  def node_hash_from_table
+    model = @node_model
+    nodes = {}
+    for row in 0...model.rowCount
+      type = model.item(row, 0)
+      name = model.item(row, 1)
+      required = model.item(row, 2)
+      next if type.text.nil? or name.text.nil?
+      type = type.text.force_encoding("UTF-8")# unless type.nil?
+      name = name.text.force_encoding("UTF-8")# unless name.nil?
+      required = required.nil? ? [] : required.text.force_encoding("UTF-8").split(/\|/)
+      node = {"name" => name}
+      required_hash = {}
+      required.each_with_index do |e, i|
+        required_hash[i]=e
+      end
+      node["required"] = required_hash unless required.empty?
+      (nodes[type]||={})[row]=node
+    end
+    nodes
+  end
+
+  def connection_hash_from_table
+    model = @connection_model
+    connections = {}
+    for row in 0...model.rowCount
+      from_type = model.item(row, 0).text.force_encoding("UTF-8")
+      from_name = model.item(row, 1).text.force_encoding("UTF-8")
+      from = {"type" => from_type, "name" => from_name}
+      to_type = model.item(row, 2).text.force_encoding("UTF-8")
+      to_name = model.item(row, 3).text.force_encoding("UTF-8")
+      to = {"type" => to_type, "name" => to_name}
+      connections[row]={"from"=>from, "to"=>to}
+    end
+    connections
+  end
+
   def create_rule_table_widget
     table_widget = Qt::GroupBox.new tr 'Rule table'
     layout = Qt::GridLayout.new
@@ -300,7 +353,7 @@ class ExpertTreeWindow < Qt::MainWindow
     table = Qt::TableView.new
     table.model = @node_model
 
-    add_node_button = Qt::PushButton.new tr 'Add row'
+    add_node_button = Qt::PushButton.new tr 'Add record'
     connect(add_node_button, SIGNAL('clicked()'), self, SLOT('add_node_row()'))
 
     layout.addWidget table, 0,0,1,2
@@ -336,7 +389,7 @@ class ExpertTreeWindow < Qt::MainWindow
     table = Qt::TableView.new
     table.model = @connection_model
 
-    add_node_button = Qt::PushButton.new tr 'Add row'
+    add_node_button = Qt::PushButton.new tr 'Add record'
     connect(add_node_button, SIGNAL('clicked()'), self, SLOT('add_connection_row()'))
 
     layout.addWidget table, 0,0,1,2
