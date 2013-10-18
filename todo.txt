@@ -7,6 +7,7 @@ functional:
     1. bi/single directional connections
     2. json support (optional)
     3. add more information
+    4. help menu
 
 additional:
     1. divide window into multiple classes

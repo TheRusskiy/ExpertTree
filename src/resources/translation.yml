@@ -56,6 +56,8 @@ add record: "Добавить запись"
 from type: "Из типа"
 to type: "К типу"
 show table: "Показать таблицу"
+delete record: "Удалить запись"
+delete selected record: "Удалить выбранную запись"
 
 # data:
 profiles: "Профили"

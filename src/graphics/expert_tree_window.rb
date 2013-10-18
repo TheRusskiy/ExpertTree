@@ -6,7 +6,7 @@ class ExpertTreeWindow < Qt::MainWindow
   require 'yaml'
 
   slots :close_program, :about, :switch_to_expert_mode, :switch_to_user_mode,
-        'start_consultation()', 'load_network_file()', 'save_network_file()', 'show_scale(bool)', 'apply_scales()', 'show_editor()', 'add_node_row()', 'add_connection_row()', 'fill_editor_from_tables()'
+        'start_consultation()', 'load_network_file()', 'save_network_file()', 'show_scale(bool)', 'apply_scales()', 'show_editor()', 'add_node_row()', 'add_connection_row()', 'fill_editor_from_tables()', 'delete_connection_row()', 'delete_node_row()'
 
   def initialize(parent = nil)
     super(parent)
@@ -350,20 +350,30 @@ class ExpertTreeWindow < Qt::MainWindow
     @node_model.setHeaderData(0, Qt::Horizontal, Qt::Variant.new(tr("Type")))
     @node_model.setHeaderData(1, Qt::Horizontal, Qt::Variant.new(tr("Name")))
     @node_model.setHeaderData(2, Qt::Horizontal, Qt::Variant.new(tr("Required")))
-    table = Qt::TableView.new
-    table.model = @node_model
+    @node_table = Qt::TableView.new
+    @node_table.model = @node_model
+    @node_table.selectionMode=1
 
     add_node_button = Qt::PushButton.new tr 'Add record'
     connect(add_node_button, SIGNAL('clicked()'), self, SLOT('add_node_row()'))
+    delete_node_button = Qt::PushButton.new tr 'Delete record'
+    delete_node_button.statusTip = tr 'Delete selected record'
+    connect(delete_node_button, SIGNAL('clicked()'), self, SLOT('delete_node_row()'))
 
-    layout.addWidget table, 0,0,1,2
+    layout.addWidget @node_table, 0,0,1,2
     layout.addWidget add_node_button, 1,0
+    layout.addWidget delete_node_button, 1,1
     table_widget.layout=layout
     table_widget
   end
 
   def add_node_row
     @node_model.insertRow @node_model.rowCount
+  end
+
+  def delete_node_row
+    selected_row = @node_table.selectionModel.currentIndex.row
+    @node_model.removeRow(selected_row) unless selected_row == -1
   end
 
   def set_model_data(model, index1, index2, value)
@@ -386,20 +396,30 @@ class ExpertTreeWindow < Qt::MainWindow
     @connection_model.setHeaderData(1, Qt::Horizontal, Qt::Variant.new(tr("name")))
     @connection_model.setHeaderData(2, Qt::Horizontal, Qt::Variant.new(tr("To type")))
     @connection_model.setHeaderData(3, Qt::Horizontal, Qt::Variant.new(tr("name")))
-    table = Qt::TableView.new
-    table.model = @connection_model
+    @connection_table = Qt::TableView.new
+    @connection_table.model = @connection_model
+    @connection_table.selectionMode=1
 
     add_node_button = Qt::PushButton.new tr 'Add record'
     connect(add_node_button, SIGNAL('clicked()'), self, SLOT('add_connection_row()'))
+    delete_connection_button = Qt::PushButton.new tr 'Delete record'
+    delete_connection_button.statusTip = tr 'Delete selected record'
+    connect(delete_connection_button, SIGNAL('clicked()'), self, SLOT('delete_connection_row()'))
 
-    layout.addWidget table, 0,0,1,2
+    layout.addWidget @connection_table, 0,0,1,2
     layout.addWidget add_node_button, 1,0
+    layout.addWidget delete_connection_button, 1,1
     table_widget.layout=layout
     table_widget
   end
 
   def add_connection_row
     @connection_model.insertRow @connection_model.rowCount
+  end
+
+  def delete_connection_row
+    selected_row = @connection_table.selectionModel.currentIndex.row
+    @connection_model.removeRow(selected_row) unless selected_row == -1
   end
 
   def clear_table model
