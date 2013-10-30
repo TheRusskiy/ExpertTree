@@ -74,7 +74,6 @@ class TreeView < Qt::GraphicsView
       x = from_x < to_x ? from_x : to_x
       y = from_y < to_y ? from_y : to_y
       gc = GraphicConnection.new conn, @distance, x, y, odd
-      gc.setPos x*@scale*@distance, y*@scale*@distance
       gc.setScale @scale
       @scene.addItem gc
       @graphic_items << gc

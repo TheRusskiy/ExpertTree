@@ -2,12 +2,14 @@ todo this todo
 visual:
     1. keep history of states (for ctrl+z, ctrl+shift+z)
     2. move groups (make setPos dynamic)
+    3. add "from_x" code to connection coords calculation
 
 functional:
     1. bi/single directional connections
     2. json support (optional)
     3. add more information
     4. help menu
+    5. explanation
 
 additional:
     1. divide window into multiple classes
