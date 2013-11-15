@@ -2,10 +2,12 @@ class TreeView < Qt::GraphicsView
   require_relative 'graphic_node'
   require_relative 'graphic_type'
   require_relative 'graphic_connection'
+  require_relative 'price_listener'
   attr_accessor :scale, :distance, :node_size
   X=1280
   Y=1024
-  def initialize(scene)
+  def initialize(scene, window)
+    @window = window
     # size modifiers
     @scale = 5
     @distance=18
@@ -23,6 +25,20 @@ class TreeView < Qt::GraphicsView
     self.renderHint = Qt::Painter::Antialiasing
     self.cacheMode = Qt::GraphicsView::CacheBackground
     self.dragMode = Qt::GraphicsView::ScrollHandDrag
+
+    upgrade_scene
+  end
+
+  def upgrade_scene
+    @scene.class.send(:define_method,
+      :mouseReleaseEvent, lambda do |event|
+        @listener.on_click event
+      end)
+
+    @scene.class.send(:define_method,
+      :listener=, lambda do |listener|
+        @listener = listener
+      end)
   end
 
   def clear
@@ -35,9 +51,14 @@ class TreeView < Qt::GraphicsView
   def network_layout= network
     clear
     @network = network
+    set_listener
     draw_nodes
     draw_connections
     @scene.invalidate
+  end
+
+  def set_listener
+    @scene.listener = PriceListener.new(@network.nodes, @window)
   end
 
   def draw_nodes

@@ -58,6 +58,9 @@ to type: "К типу"
 show table: "Показать таблицу"
 delete record: "Удалить запись"
 delete selected record: "Удалить выбранную запись"
+your card!: "Ваша карта"
+with the price of: "По цене"
+you can get: "Вы можете купить"
 
 # data:
 profiles: "Профили"

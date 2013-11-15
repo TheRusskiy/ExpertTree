@@ -19,6 +19,13 @@ class Connection
     @activated
   end
 
+  def by_type type
+    type = type.to_s
+    return @from if @from.type == type
+    return @to if @to.type == type
+    raise Exception.new "No node with such type: #{type}"
+  end
+
   def to_s
     "From #{@from} to #{@to}"
   end

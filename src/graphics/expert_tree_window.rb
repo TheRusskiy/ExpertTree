@@ -91,7 +91,7 @@ class ExpertTreeWindow < Qt::MainWindow
     layout = Qt::GridLayout.new
 
     # Add widgets to layout
-    @tree_view = TreeView.new Qt::GraphicsScene.new
+    @tree_view = TreeView.new(Qt::GraphicsScene.new, self)
     layout.addWidget @tree_view, 1, 0, 1, 3
 
     start_button = Qt::PushButton.new(tr('Start Consultation'))

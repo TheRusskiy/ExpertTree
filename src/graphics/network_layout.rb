@@ -32,6 +32,16 @@ attr_reader :types
     @structure.connections
   end
 
+  def nodes
+    nodes = []
+    @types.each do |type|
+      type.each do |node|
+        nodes << node
+      end
+    end
+    nodes
+  end
+
   class TypeLayout < Array
     attr_reader :name, :top_left, :bot_right
     def initialize(type_name, node_array, top_left, bot_right)
