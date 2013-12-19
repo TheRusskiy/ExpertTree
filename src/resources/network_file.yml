@@ -19,46 +19,49 @@ nodes:
       name: "1024"
     3:
       name: "2048"
+    4:
+      name: "3072"
+    5:
+      name: "4086"
   bus:
     1:
       name: "pci-e 2.0"
     2:
       name: "pci-e 3.0"
+  port:
+    1:
+      name: "dvi"
+    2:
+      name: "hdmi"
   frequency:
     1:
-      name: "1000"
+      name: "600"
     2:
-      name: "2000"
+      name: "700"
     3:
-      name: "3000"
+      name: "800"
     4:
-      name: "4000"
+      name: "900"
+    5:
+      name: "1000"
+    6:
+      name: "1100"
+    7:
+      name: "1200"
   videocard:
     1:
-      name: "GT 450"
+      name: "GTX 760"
       required:
         1: "bus"
         2: "memory"
         3: "frequency"
     2:
-      name: "AMD 5870"
+      name: "GTX 780"
       required:
         1: "bus"
         2: "memory"
         3: "frequency"
-    3:
-      name: "AMD 7970"
-      required:
-        1: "bus"
-        2: "memory"
-        3: "frequency"
-    4:
-      name: "Nvidia Titan"
-      required:
-        1: "bus"
-        2: "memory"
-        3: "frequency"
-  price less than:
+  price:
     1:
       name: "2000"
     2:
@@ -80,154 +83,84 @@ connections:
   10:
     from:
       type: "videocard"
-      name: "AMD 5870"
+      name: "GTX 760"
     to:
       type: "memory"
-      name: "1024"
+      name: "2048"
   11:
     from:
       type: "videocard"
-      name: "AMD 7970"
+      name: "GTX 760"
     to:
-      type: "memory"
-      name: "2048"
+      type: "bus"
+      name: "pci-e 3.0"
   12:
     from:
       type: "videocard"
-      name: "GT 450"
+      name: "GTX 760"
     to:
-      type: "memory"
-      name: "512"
+      type: "port"
+      name: "dvi"
   13:
     from:
       type: "videocard"
-      name: "Nvidia Titan"
+      name: "GTX 760"
     to:
-      type: "memory"
-      name: "2048"
+      type: "port"
+      name: "hdmi"
+  14:
+    from:
+      type: "videocard"
+      name: "GTX 760"
+    to:
+      type: "frequency"
+      name: "900"
+  15:
+    from:
+      type: "videocard"
+      name: "GTX 760"
+    to:
+      type: "price"
+      name: "8000"
   20:
     from:
       type: "videocard"
-      name: "AMD 5870"
+      name: "GTX 780"
     to:
-      type: "bus"
-      name: "pci-e 2.0"
+      type: "memory"
+      name: "3072"
   21:
     from:
       type: "videocard"
-      name: "AMD 7970"
+      name: "GTX 780"
     to:
       type: "bus"
       name: "pci-e 3.0"
   22:
     from:
       type: "videocard"
-      name: "GT 450"
+      name: "GTX 780"
     to:
-      type: "bus"
-      name: "pci-e 2.0"
+      type: "port"
+      name: "dvi"
   23:
     from:
       type: "videocard"
-      name: "Nvidia Titan"
+      name: "GTX 780"
     to:
-      type: "bus"
-      name: "pci-e 3.0"
-  30:
+      type: "port"
+      name: "hdmi"
+  24:
     from:
       type: "videocard"
-      name: "AMD 5870"
-    to:
-      type: "frequency"
-      name: "2000"
-  31:
-    from:
-      type: "videocard"
-      name: "AMD 7970"
-    to:
-      type: "frequency"
-      name: "3000"
-  32:
-    from:
-      type: "videocard"
-      name: "Nvidia Titan"
-    to:
-      type: "frequency"
-      name: "4000"
-  40:
-    from:
-      type: "videocard"
-      name: "AMD 7970"
-    to:
-      type: "price less than"
-      name: "16000"
-  41:
-    from:
-      type: "videocard"
-      name: "AMD 5870"
-    to:
-      type: "price less than"
-      name: "8000"
-  42:
-    from:
-      type: "videocard"
-      name: "GT 450"
-    to:
-      type: "price less than"
-      name: "4000"
-  43:
-    from:
-      type: "videocard"
-      name: "Nvidia Titan"
-    to:
-      type: "price less than"
-      name: "20000"
-  50:
-    from:
-      type: "profiles"
-      name: "gaming"
-    to:
-      type: "frequency"
-      name: "3000"
-  501:
-    from:
-      type: "profiles"
-      name: "gaming"
-    to:
-      type: "frequency"
-      name: "4000"
-  51:
-    from:
-      type: "profiles"
-      name: "gaming"
-    to:
-      type: "memory"
-      name: "1024"
-  52:
-    from:
-      type: "profiles"
-      name: "gaming"
-    to:
-      type: "memory"
-      name: "2048"
-  53:
-    from:
-      type: "profiles"
-      name: "work"
+      name: "GTX 780"
     to:
       type: "frequency"
       name: "1000"
-  54:
+  25:
     from:
-      type: "profiles"
-      name: "work"
+      type: "videocard"
+      name: "GTX 780"
     to:
-      type: "memory"
-      name: "256"
-  55:
-    from:
-      type: "profiles"
-      name: "work"
-    to:
-      type: "memory"
-      name: "512"
+      type: "price"
+      name: "16000"

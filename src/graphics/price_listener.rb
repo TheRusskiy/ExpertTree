@@ -9,7 +9,7 @@ class PriceListener
     min = nil
     min_node = nil
     @nodes.each do |n|
-      if n.type == 'price less than' and n.activated?
+      if n.type == 'price' and n.activated?
         if min.nil?
           min = n.name.to_i
           min_node = n
