@@ -22,7 +22,7 @@ nodes:
     4:
       name: "3072"
     5:
-      name: "4086"
+      name: "4096"
   bus:
     1:
       name: "pci-e 2.0"
@@ -57,6 +57,24 @@ nodes:
         3: "frequency"
     2:
       name: "GTX 780"
+      required:
+        1: "bus"
+        2: "memory"
+        3: "frequency"
+    3:
+      name: "GTX 770"
+      required:
+        1: "bus"
+        2: "memory"
+        3: "frequency"
+    4:
+      name: "Radeon 270"
+      required:
+        1: "bus"
+        2: "memory"
+        3: "frequency"
+    5:
+      name: "Radeon 7770"
       required:
         1: "bus"
         2: "memory"
@@ -163,4 +181,179 @@ connections:
       name: "GTX 780"
     to:
       type: "price"
+      name: "12000"
+  30:
+    from:
+      type: "videocard"
+      name: "GTX 770"
+    to:
+      type: "memory"
+      name: "4096"
+  31:
+    from:
+      type: "videocard"
+      name: "GTX 770"
+    to:
+      type: "bus"
+      name: "pci-e 3.0"
+  32:
+    from:
+      type: "videocard"
+      name: "GTX 770"
+    to:
+      type: "port"
+      name: "dvi"
+  33:
+    from:
+      type: "videocard"
+      name: "GTX 770"
+    to:
+      type: "port"
+      name: "hdmi"
+  34:
+    from:
+      type: "videocard"
+      name: "GTX 770"
+    to:
+      type: "frequency"
+      name: "1100"
+  35:
+    from:
+      type: "videocard"
+      name: "GTX 770"
+    to:
+      type: "price"
       name: "16000"
+  40:
+    from:
+      type: "videocard"
+      name: "Radeon 270"
+    to:
+      type: "memory"
+      name: "2048"
+  41:
+    from:
+      type: "videocard"
+      name: "Radeon 270"
+    to:
+      type: "bus"
+      name: "pci-e 2.0"
+  42:
+    from:
+      type: "videocard"
+      name: "Radeon 270"
+    to:
+      type: "port"
+      name: "dvi"
+  44:
+    from:
+      type: "videocard"
+      name: "Radeon 270"
+    to:
+      type: "frequency"
+      name: "1000"
+  45:
+    from:
+      type: "videocard"
+      name: "Radeon 270"
+    to:
+      type: "price"
+      name: "8000"
+  50:
+    from:
+      type: "videocard"
+      name: "Radeon 7770"
+    to:
+      type: "memory"
+      name: "1024"
+  51:
+    from:
+      type: "videocard"
+      name: "Radeon 7770"
+    to:
+      type: "bus"
+      name: "pci-e 2.0"
+  52:
+    from:
+      type: "videocard"
+      name: "Radeon 7770"
+    to:
+      type: "port"
+      name: "dvi"
+  54:
+    from:
+      type: "videocard"
+      name: "Radeon 7770"
+    to:
+      type: "frequency"
+      name: "800"
+  55:
+    from:
+      type: "videocard"
+      name: "Radeon 7770"
+    to:
+      type: "price"
+      name: "4000"
+  60:
+    from:
+      type: "profiles"
+      name: "gaming"
+    to:
+      type: "frequency"
+      name: "1000"
+  61:
+    from:
+      type: "profiles"
+      name: "gaming"
+    to:
+      type: "frequency"
+      name: "1100"
+  62:
+    from:
+      type: "profiles"
+      name: "gaming"
+    to:
+      type: "frequency"
+      name: "1200"
+  63:
+    from:
+      type: "profiles"
+      name: "gaming"
+    to:
+      type: "memory"
+      name: "3072"
+  64:
+    from:
+      type: "profiles"
+      name: "gaming"
+    to:
+      type: "memory"
+      name: "4096"
+  70:
+    from:
+      type: "profiles"
+      name: "work"
+    to:
+      type: "frequency"
+      name: "800"
+  71:
+    from:
+      type: "profiles"
+      name: "work"
+    to:
+      type: "frequency"
+      name: "900"
+  73:
+    from:
+      type: "profiles"
+      name: "work"
+    to:
+      type: "memory"
+      name: "1024"
+  74:
+    from:
+      type: "profiles"
+      name: "work"
+    to:
+      type: "memory"
+      name: "512"
